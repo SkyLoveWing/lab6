@@ -12,6 +12,10 @@ function initializePage() {
 	$('.project a').click(addProjectDetails);
 
 	$('#colorBtn').click(randomizeColors);
+
+	// $("#testjs").click(function(e){
+	// 	$.get("/project.random", addProject)
+	// }
 }
 
 /*
@@ -27,12 +31,55 @@ function addProjectDetails(e) {
 	var idNumber = projectID.substr('project'.length);
 
 	console.log("User clicked on project " + idNumber);
+	$.get("/project/" + idNumber, addProject);
+	console.log("/project/" + idNumber);
 }
+
+function addProject(result) {
+	console.log(result);
+	var idNumber = result['id'];
+	var projectHTML = '<img src="' + result['image'] + '" class="detailsImage">' +
+	 '<p>' + result['summary'] + '</p>' + 
+	 '<p><small>' + result['date'] + '</small></p>';
+	$("#project" + idNumber + " .details").html(projectHTML);
+}
+
+
+
+// function addProject(result){
+// 		console.log("/project/");
+// 		var idNumber= result['id'];
+// 		var projectHTML = '<a href="#" class="thumbnail">' + 
+// 		'<img src="' + result['image'] + '" class="img">' + 
+// 		'<p>' + result['title'] + '<p>' + 
+// 		'<p><small>' + result['date'] + '</small></p></a>';
+
+// 		// $(".project").html(projectHTML);
+// 		$("#project" + idNumber + ".details").html(projectHTML);
+// }
 
 /*
  * Make an AJAX call to retrieve a color palette for the site
  * and apply it
  */
 function randomizeColors(e) {
+	e.preventDefault();
 	console.log("User clicked on color button");
+	$.get("/palette/", color);
+
 }
+
+function color(result){
+	var hexColor = result['colors'];
+	var colors = hexColor['hex'];
+	$('body').css('background-color', colors[0]);
+	$('.thumbnail').css('background-color', colors[1]);
+	$('h1, h2, h3, h4, h5, h5').css('color', colors[2]);
+	$('p').css('color', colors[3]);
+	$('.project img').css('opacity', .75);
+}
+
+
+
+
+
